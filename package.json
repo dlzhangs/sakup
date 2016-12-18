@@ -1,0 +1,22 @@
+{
+  "name": "sakup",
+  "version": "1.0.0",
+  "description": "saku pl fw",
+  "main": "index.js",
+  "scripts": {
+    "test": "todo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlzhangs/sakup.git"
+  },
+  "keywords": [
+    "saku"
+  ],
+  "author": "saku",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dlzhangs/sakup/issues"
+  },
+  "homepage": "https://github.com/dlzhangs/sakup#readme"
+}
