@@ -1,22 +1,28 @@
 {
-  "name": "sakup",
+  "name": "ts-demo",
   "version": "1.0.0",
-  "description": "saku pl fw",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "todo"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dlzhangs/sakup.git"
-  },
-  "keywords": [
-    "saku"
-  ],
-  "author": "saku",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dlzhangs/sakup/issues"
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "jspm": "^0.16.48",
+    "webix": "^4.1.0"
   },
-  "homepage": "https://github.com/dlzhangs/sakup#readme"
+  "jspm": {
+    "dependencies": {
+      "jquery": "npm:jquery@^3.1.1",
+      "jspm/nodelibs-module": "github:jspm/nodelibs-module@^0.1.0"
+    },
+    "devDependencies": {
+      "ts": "npm:typescript@^2.0.7",
+      "ts-runtime": "npm:babel-runtime@^5.8.24",
+      "typescript": "npm:typescript@^2.0.7"
+    }
+  }
 }
