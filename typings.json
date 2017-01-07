@@ -4,5 +4,8 @@
   },
   "dependencies": {
     "lodash": "registry:npm/lodash#4.0.0+20161015015725"
+  },
+  "devDependencies": {
+    "express": "registry:dt/express#4.0.0+20161115070701"
   }
 }
