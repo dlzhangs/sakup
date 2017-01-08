@@ -1,6 +1,7 @@
 {
   "globalDependencies": {
-    "node": "registry:dt/node#6.0.0+20161229171858"
+    "node": "registry:dt/node#6.0.0+20161229171858",
+    "webix": "registry:dt/webix#4.1.0+20161124142931"
   },
   "dependencies": {
     "lodash": "registry:npm/lodash#4.0.0+20161015015725"
