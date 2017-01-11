@@ -1,21 +1,21 @@
 export default () => {
 
     return {
-        // ui: {
-        //     view: "calendar",
-        //     id: "my_calendar",
-        //     date: new Date(2012, 3, 16),
-        //     weekHeader: true,
-        //     events: webix.Date.isHoliday,
-        //     calendarDateFormat: "%Y-%m-%d",
-        //     width: 300,
-        //     height: 250
-        // }
         ui: {
             id: "layout",
             height: 550,
             width: 700,
             rows: [
+                {
+                    view: "calendar",
+                    id: "my_calendar",
+                    date: new Date(2012, 3, 16),
+                    weekHeader: true,
+                    events: webix.Date.isHoliday,
+                    calendarDateFormat: "%Y-%m-%d",
+                    width: 300,
+                    height: 250
+                },
                 { template: "row 1", height: 35 },
                 { template: "row 1" },
                 { view: "resizer" },
