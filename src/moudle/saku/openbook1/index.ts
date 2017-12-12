@@ -11,7 +11,7 @@ let bodyUI = BodyUI();
 export default () => {
 
     webix.ui(menuUI.ui);
-    webix.ui(bodyUI.ui);
+   // webix.ui(bodyUI.ui);
 };
 
 export function destructor() {

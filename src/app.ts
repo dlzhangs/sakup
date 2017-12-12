@@ -1,8 +1,28 @@
-//import webix from "webix";
+let lastHash = "";
+let create = () => {
+    if (window["app"]) return;
+    let app = {};
+    webix.extend(app, webix.EventSystem);
+    if(("onhashchange" in window) && ((typeof document["documentMode"]==="undefined") || document["documentMode"]==8)) {
+        window.onhashchange = router;
+    } else {
+        setInterval(function() {  
+            var ischanged = lastHash !== location.hash; 
+            if(ischanged) {  
+                lastHash = location.hash;
+                router();
+            }  
+        }, 150);  
+    }
+    app["router"]= router;
+    window["app"] =app;
+    return app;
+};
+var app = create();
+export default app;
 
-export default () => {
-}
-
+let lastLocalHash = "";
+let lastPage = {};
 export function router() {
     /**
      * pretty AJAX URL
@@ -10,15 +30,18 @@ export function router() {
      * 
      * N.http://domain:port/#!saku.sub.index:param=XXX
      */
-    console.log(location);
-
-    let params = {};
-    let subRoot = "";
     let pageView = parsePageView(location.hash);
-    if (pageView) {
-        let moduleUrl = "src/moudle/"+pageView;
-        SystemJS.import(moduleUrl).then(function(app) {
-            app.default();
+    let params = parseParam(location.hash);
+    let moduleUrl = "src/moudle/"+pageView;
+    if (moduleUrl && location.hash!==lastLocalHash) {
+        lastLocalHash = location.hash;
+        if (lastPage && lastPage["destructor"]) {
+            lastPage["destructor"]();
+        }
+        SystemJS.delete(moduleUrl);
+        SystemJS.import(moduleUrl).then(function(page) {
+            lastPage = page;
+            page.default();
         },function(err){
             SystemJS.delete(moduleUrl);
             fileNotFound(err);
@@ -33,6 +56,21 @@ let parsePageView = (urlHash)=>{
     pageView = (pageView && (pageView.indexOf("#!") == 0)) ? pageView.substr(2) : pageView;
     pageView = pageView.replace(new RegExp("\\.","gm"),"/");
     return pageView;
+};
+let parseParam = (urlHash)=>{
+    let pageView = urlHash ? urlHash.substr(0,urlHash.indexOf(":")) : "";
+    let paramStr = urlHash? urlHash.replace(pageView, ""):"";
+    let params = {};
+    if (paramStr) {
+        let groups = paramStr.split(":");
+        for (let idx in groups) {
+            if (groups[idx].indexOf("=")>1) {
+                let paramObj = groups[idx].split("=");
+                params[paramObj[0]] = paramObj[1];
+            }
+        }
+    }
+    return params;
 };
 let fileNotFound = (err)=>{
     webix.ui({template:"404 not found"});
