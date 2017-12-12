@@ -9,16 +9,40 @@ let menuUI = MenuUI();
 let bodyUI = BodyUI();
 
 export default () => {
-
-    webix.ui(menuUI.ui);
-    webix.ui(bodyUI.ui);
+    let uid = webix.uid().toString();
+    let uidBtn = webix.uid().toString();
+    return {
+        ui: {
+            id: uid,
+            view: "accordion",
+            rows: [
+                menuUI.ui,
+                {
+                    id: uidBtn,
+                    view: "button",
+                    value: "Button",
+                    type: "form",
+                    inputWidth: 100
+                },
+                bodyUI.ui
+            ]
+        },
+        $init: () => {
+            $$(uidBtn).attachEvent("onItemClick", function (id) {
+                console.log("onItemClick");
+            });
+            console.log("init");
+        },
+        $onurlchange: (params) => {
+            console.log(params);
+        },
+        $event: {
+            aaa: () => {
+                console.log("AAA");
+            }
+        },
+        get $view(): any {
+            return webix.$$(uid)
+        }
+    }
 };
-
-export function destructor() {
-    if(menuUI.$view){
-        menuUI.$view.destructor();
-    }
-    if(bodyUI.$view){
-        bodyUI.$view.destructor();
-    }
-}

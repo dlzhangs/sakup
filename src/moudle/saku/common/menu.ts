@@ -4,7 +4,8 @@ export default () => {
   return {
     ui: {
       id: uid,
-      height: 100,
+      
+      css: "color-menu-back",
       cols: [
         {
           width: 100,
@@ -12,6 +13,7 @@ export default () => {
         {
           view: "menu",
           subMenuPos: "down",
+          margin:2,
           data: [
             {
               value: "银企直连",
@@ -31,7 +33,11 @@ export default () => {
             },
             {
               value: "用户",
-              submenu: ["个人设置", "注销"]
+              submenu: ["个人设置",
+                {
+                  value: "注销",
+                  href: "#!saku.login.index"
+                }]
             }
           ],
           type: {
@@ -40,12 +46,11 @@ export default () => {
             width: 200,
           }
         },
-        {}
       ]
     },
-    get $view():any{
+    get $view(): any {
       return webix.$$(uid)
     }
-    
+
   };
 }
