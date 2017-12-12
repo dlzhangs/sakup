@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>JSPM+TS+WEBIX</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="./node_modules/webix/webix.css" rel="stylesheet">
-    </head>
-    <body>
+
+<head>
+    <title>JSPM+TS+WEBIX</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./node_modules/webix/webix.css" rel="stylesheet">
+</head>
+
+<body>
     <script src="./node_modules/webix/webix_debug.js"></script>
     <script src="./jspm_packages/system.js"></script>
     <script src="config.js"></script>
     <script>
-        SystemJS.import("src/index").then(function(app){
-            app.default();
+        SystemJS.import("src/app").then(function(app) {
+            app.router();
         });
     </script>
-    </body>
+</body>
+
 </html>
