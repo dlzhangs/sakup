@@ -6,8 +6,21 @@ export default () => {
       id: uid,
       css: "color-menu-back",
       cols: [
+        { width: 20 },
         {
-          width: 1000,
+          view: "label",
+          label: "<span style='color:white;font-size:18pt!important;letter-spacing:10px;'>耕海地产</span>",
+          align: "left",
+          width: 140
+        },
+        {
+          view: "label",
+          label: "<span style='color:white;font-size:11pt!important;letter-spacing:1px;'>心有帆&nbsp;海无界</span>",
+          align: "left",
+          width: 200
+        },
+        {
+          width: 600,
         },
         {
           view: "menu",
@@ -32,6 +45,7 @@ export default () => {
             // css: "color-menu-back",
             subsign: true,
             width: 100,
+            height: 38,
           }
         },
         {}

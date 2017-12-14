@@ -51,6 +51,16 @@ export function router() {
 
     if (!rootUrl) return;
     if (!pageUrl) {
+        if (lastPageUrl) {
+            lastPageUrl = pageUrl;
+            if (lastPage.$id) {
+                // if (lastPage && lastPage["$view"]) {
+                //     lastPage["$view"].destructor();
+                // }
+                $$(lastRoot.$sid).removeView(lastPage.$id);
+                lastPage = {}
+            }
+        }
         SystemJS.delete(rootUrl);
         if (lastRootUrl !== rootUrl) {
             lastRootUrl = rootUrl;
@@ -77,11 +87,12 @@ export function router() {
         SystemJS.delete(pageUrl);
         if (lastPageUrl !== pageUrl) {
             lastPageUrl = pageUrl;
-            // if (lastPage && lastPage["$view"]) {
-            //     lastPage["$view"].destructor();
-            // }
             if (lastPage.$id) {
+                // if (lastPage && lastPage["$view"]) {
+                //     lastPage["$view"].destructor();
+                // }
                 $$(lastRoot.$sid).removeView(lastPage.$id);
+                lastPage = {}
             }
             SystemJS.import(pageUrl).then(function (page) {
                 lastPage = page.default();
@@ -122,7 +133,6 @@ export function router() {
                     if (lastRoot["$onurlchange"]) {
                         lastRoot["$onurlchange"](params);
                     }
-
 
                     if (lastPage["$init"]) {
                         lastPage["$init"](params);

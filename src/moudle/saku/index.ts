@@ -9,7 +9,6 @@ let sidebarUI = SidebarUI();
 export default () => {
     let uid = webix.uid().toString();
     let uidSub = webix.uid().toString();
-    let uidBtn = webix.uid().toString();
     let subView = {
         ui: {
             id: uidSub,
@@ -30,7 +29,7 @@ export default () => {
                         {
                             rows: [
                                 {
-                                    id:"lblBreadCrumb",
+                                    id: "lblBreadCrumb",
                                     view: "label",
                                     label: "",
                                     inputWidth: 200,
@@ -43,6 +42,34 @@ export default () => {
             ]
         },
         $init: () => {
+            sidebarUI.$view.define("data",
+                [
+                    {
+                        id: "#",
+                        icon: "dashboard",
+                        value: "银企直连",
+                        data: [
+                            {
+                                id: "balance",
+                                value: "账户余额查询",
+                                href: "#!saku.balance.index",
+                            },
+                            {
+                                id: "detailed",
+                                value: "账户明细查询",
+                            },
+                            {
+                                id: "transfer",
+                                value: "转账信息查询",
+                            },
+                            {
+                                id: "payment",
+                                value: "单笔支付",
+                            }
+                        ],
+                    },
+                ]);
+                sidebarUI.$view.refresh();
         },
         $onurlchange: (params) => {
             console.log(params);

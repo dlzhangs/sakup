@@ -2,33 +2,50 @@
 
 export default () => {
     let uid = webix.uid().toString();
+    let uidWin = webix.uid().toString();
+    let uidForm = webix.uid().toString();
     let uidLogin = webix.uid().toString();
     let uidReset = webix.uid().toString();
     return {
         ui: {
-            id:uid,
-            view: "form",
-            width: 300,
-            elements: [
-                { view: "text", name: "username", label: "用户名" },
-                { view: "text", name: "password", type: "password", label: "密码" },
-                {
-                    cols: [
-                        { id: uidLogin, view: "button", value: "登录", type: "form" },
-                        { id: uidReset, view: "button", value: "重置" }
-                    ]
-                }
-            ]
+            id: uid,
+            css: "color-menu-back"
         },
         $init: () => {
-            $$(uidLogin).attachEvent("onItemClick", function (id) {
-                let values = $$(uid).getValues();
-                if (values["username"]==="admin") {
-                    location.href="http://localhost/#!saku.mainpage.index";
+            let window = webix.ui({
+                id: uidWin,
+                view: "window",
+                head: "用户登录",
+                move: false,
+                position: "center",
+                width: 300,
+                height: 300,
+                body: {
+                    id: uidForm,
+                    view: "form",
+                    width: 300,
+                    elements: [
+                        { view: "text", name: "username", label: "用户名" },
+                        { view: "text", name: "password", label: "密码", type: "password" },
+                        {
+                            cols: [
+                                { id: uidLogin, view: "button", value: "登录", type: "form" },
+                                { id: uidReset, view: "button", value: "重置" }
+                            ]
+                        }
+                    ]
                 }
+            }).show();
+
+            $$(uidLogin).attachEvent("onItemClick", function (id) {
+                let values = $$(uidForm).getValues();
+                if (values["username"] === "admin") {
+                    location.href = "#!saku.index";
+                }
+                $$(uidWin).close();
             });
             $$(uidReset).attachEvent("onItemClick", function (id) {
-                $$(uid).setValues({username:"",password:""});
+                $$(uidForm).setValues({});
             });
         },
         $onurlchange: (params) => {
