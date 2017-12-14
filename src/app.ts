@@ -22,34 +22,114 @@ var app = create();
 export default app;
 
 let lastLocalHash = "";
+let lastRootUrl = "";
+let lastRoot = {};
 let lastPageUrl = "";
 let lastPage = {};
+
+let lastInfo = {
+    localHash: "",
+    rootUrl: "",
+    root: {},
+    pageUrl: "",
+    page: {}
+};
+/**
+ * pretty AJAX URL
+ * S.http://domain:port/#!saku.sys.index/moudle.index:param=XXX
+ * 
+ * N.http://domain:port/#!saku.sub.index:param=XXX
+ */
 export function router() {
-    /**
-     * pretty AJAX URL
-     * S.http://domain:port/index.html?param=XXX#!saku.sys.index/moudle.index
-     * 
-     * N.http://domain:port/#!saku.sub.index:param=XXX
-     */
+
+    if (lastLocalHash === location.hash) return;
+    lastLocalHash = location.hash;
+
+    let rootUrl = parseRootUrl(location.hash);
     let pageUrl = parsePageUrl(location.hash);
     let params = parseParam(location.hash);
-    if (!pageUrl) return;
-    if (lastLocalHash !== location.hash) {
-        lastLocalHash = location.hash;
+
+    if (!rootUrl) return;
+    if (!pageUrl) {
+        SystemJS.delete(rootUrl);
+        if (lastRootUrl !== rootUrl) {
+            lastRootUrl = rootUrl;
+            if (lastRoot && lastRoot["$view"]) {
+                lastRoot["$view"].destructor();
+            }
+            SystemJS.import(rootUrl).then(function (page) {
+                lastRoot = page.default();
+                webix.ui(lastRoot.ui);
+                if (lastRoot["$init"]) {
+                    lastRoot["$init"](params);
+                }
+                if (lastRoot["$onurlchange"]) {
+                    lastRoot["$onurlchange"](params);
+                }
+
+            }, function (err) {
+                SystemJS.delete(rootUrl);
+                fileNotFound(err);
+            });
+        }
+
+    } else {
         SystemJS.delete(pageUrl);
         if (lastPageUrl !== pageUrl) {
             lastPageUrl = pageUrl;
-            if (lastPage && lastPage["$view"]) {
-                lastPage["$view"].destructor();
+            // if (lastPage && lastPage["$view"]) {
+            //     lastPage["$view"].destructor();
+            // }
+            if (lastPage.$id) {
+                $$(lastRoot.$sid).removeView(lastPage.$id);
             }
             SystemJS.import(pageUrl).then(function (page) {
                 lastPage = page.default();
-                webix.ui(lastPage.ui);
-                if (lastPage["$init"]) {
-                    lastPage["$init"](params);
-                }
-                if (lastPage["$onurlchange"]) {
-                    lastPage["$onurlchange"](params);
+
+                SystemJS.delete(rootUrl);
+                if (lastRootUrl !== rootUrl) {
+                    lastRootUrl = rootUrl;
+                    if (lastRoot && lastRoot["$view"]) {
+                        lastRoot["$view"].destructor();
+                    }
+                    SystemJS.import(rootUrl).then(function (page) {
+                        lastRoot = page.default();
+                        webix.ui(lastRoot.ui);
+                        $$(lastRoot.$sid).addView(lastPage.ui);
+                        if (lastRoot["$init"]) {
+                            lastRoot["$init"](params);
+                        }
+                        if (lastRoot["$onurlchange"]) {
+                            lastRoot["$onurlchange"](params);
+                        }
+
+                        if (lastPage["$init"]) {
+                            lastPage["$init"](params);
+                        }
+                        if (lastPage["$onurlchange"]) {
+                            lastPage["$onurlchange"](params);
+                        }
+
+                    }, function (err) {
+                        SystemJS.delete(rootUrl);
+                        fileNotFound(err);
+                    });
+                } else {
+                    $$(lastRoot.$sid).addView(lastPage.ui);
+                    if (lastRoot["$init"]) {
+                        lastRoot["$init"](params);
+                    }
+                    if (lastRoot["$onurlchange"]) {
+                        lastRoot["$onurlchange"](params);
+                    }
+
+
+                    if (lastPage["$init"]) {
+                        lastPage["$init"](params);
+                    }
+                    if (lastPage["$onurlchange"]) {
+                        lastPage["$onurlchange"](params);
+                    }
                 }
 
             }, function (err) {
@@ -62,14 +142,34 @@ export function router() {
             }
         }
     }
+
+};
+
+let parseRootUrl = (urlHash) => {
+    if (!urlHash) return "";
+    let pageUrl = urlHash.indexOf(":") > 0 ? urlHash.substr(0, urlHash.indexOf(":")) : urlHash;
+    pageUrl = (pageUrl && (pageUrl.indexOf("#!") == 0)) ? pageUrl.substr(2) : pageUrl;
+    if (pageUrl.indexOf("/") > 0) {
+        pageUrl = pageUrl.split("/")[0];
+    }
+    pageUrl = pageUrl.replace(new RegExp("\\.", "gm"), "/");
+    return "src/moudle/" + pageUrl;
 };
 
 let parsePageUrl = (urlHash) => {
-    if (!urlHash) return ""; 
-    let pageUrl = urlHash.indexOf(":")>0 ? urlHash.substr(0, urlHash.indexOf(":")) : urlHash;
+    if (!urlHash) return "";
+    let pageUrl = urlHash.indexOf(":") > 0 ? urlHash.substr(0, urlHash.indexOf(":")) : urlHash;
     pageUrl = (pageUrl && (pageUrl.indexOf("#!") == 0)) ? pageUrl.substr(2) : pageUrl;
-    pageUrl = pageUrl.replace(new RegExp("\\.", "gm"), "/");
-    return "src/moudle/" + pageUrl;
+    if (pageUrl.indexOf("/") > 0) {
+        let root = pageUrl.split("/")[0];
+        if (root.indexOf(".") > 0) {
+            root = root.substr(0, root.lastIndexOf("."));
+        }
+        pageUrl = root + "/" + pageUrl.split("/")[1];
+        pageUrl = pageUrl.replace(new RegExp("\\.", "gm"), "/");
+        return "src/moudle/" + pageUrl;
+    }
+    return "";
 };
 let parseParam = (urlHash) => {
     let pageUrl = urlHash ? urlHash.substr(0, urlHash.indexOf(":")) : "";

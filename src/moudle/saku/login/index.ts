@@ -19,7 +19,6 @@ export default () => {
                     ]
                 }
             ]
-        ]
         },
         $init: () => {
             $$(uidLogin).attachEvent("onItemClick", function (id) {

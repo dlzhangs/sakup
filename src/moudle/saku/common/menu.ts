@@ -4,36 +4,24 @@ export default () => {
   return {
     ui: {
       id: uid,
-      
       css: "color-menu-back",
       cols: [
         {
-          width: 100,
+          width: 1000,
         },
         {
           view: "menu",
           subMenuPos: "down",
-          margin:2,
+          css: "main-menu",
           data: [
             {
-              value: "银企直连",
-              submenu: [{
-                value: "账户余额查询",
-                href: "#!saku.openbook.index:param=AAA"
-              }, {
-                value: "账户明细查询",
-                href: "#!saku.openbook1.index:param=AAA"
-              }, {
-                value: "转账信息查询",
-                href: "#!saku.openbook.index:param=CCC"
-              }, {
-                value: "单笔支付",
-                href: "#!saku.openbook.index:param=DDD"
-              }],
-            },
-            {
               value: "用户",
-              submenu: ["个人设置",
+              icon: "user",
+              submenu: [
+                {
+                  value: "个人设置",
+                  href: "#!saku.login.index"
+                },
                 {
                   value: "注销",
                   href: "#!saku.login.index"
@@ -41,11 +29,12 @@ export default () => {
             }
           ],
           type: {
+            // css: "color-menu-back",
             subsign: true,
-            height: 50,
-            width: 200,
+            width: 100,
           }
         },
+        {}
       ]
     },
     get $view(): any {

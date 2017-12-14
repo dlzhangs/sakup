@@ -1,11 +1,7 @@
 /// <reference path="../../../../typings/globals/webix/index.d.ts" />
 
-import MenuUI from "../common/menu";
-
 import BodyUI from "./body";
 
-
-let menuUI = MenuUI();
 let bodyUI = BodyUI();
 
 export default () => {
@@ -13,13 +9,18 @@ export default () => {
     return {
         ui: {
             id: uid,
-            rows:[
-               menuUI.ui,
-               //bodyUI.ui
+            cols: [
+                bodyUI.ui
             ]
         },
         get $view(): any {
-            return webix.$$(uid)
+            return webix.$$(uid);
+        },
+        get $id(): any {
+            return uid;
+        },
+        $init: () => {
+            $$("lblBreadCrumb").setValue("&nbsp;银企直连 > " + "账户余额查询");
         }
     }
 };
