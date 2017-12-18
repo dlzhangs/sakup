@@ -12,6 +12,7 @@ export default () => {
             css: "color-menu-back"
         },
         $init: () => {
+            webix.setCookie("ssUid", "", 0);
             let window = webix.ui({
                 id: uidWin,
                 view: "window",
@@ -39,10 +40,20 @@ export default () => {
 
             $$(uidLogin).attachEvent("onItemClick", function (id) {
                 let values = $$(uidForm).getValues();
-                if (values["username"] === "admin") {
-                    location.href = "#!saku.index";
+                let username = values["username"];
+                let password = values["password"];
+                if (!username || !password) {
+                    webix.message("未输入用户名或密码");
+                    return;
                 }
-                $$(uidWin).close();
+                if (values["username"] === "admin") {
+                    webix.setCookie("ssUid", "98979796192312311", 15);
+                    location.href = "#!saku.index";
+                    $$(uidWin).close();
+                } else {
+                    webix.message("用户名或密码不正确");
+                    return;
+                }
             });
             $$(uidReset).attachEvent("onItemClick", function (id) {
                 $$(uidForm).setValues({});

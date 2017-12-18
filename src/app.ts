@@ -1,4 +1,12 @@
 let lastHash = "";
+let checkUid = () => {
+    if ("98979796192312311" !== getCookie("ssUid")) {
+        if ("#!saku.login.index" !== lastHash) {
+            location.href = "#!saku.login.index";
+            //clearInterval(intervalid);
+        }
+    }
+}
 let create = () => {
     if (window["app"]) return;
     let app = {};
@@ -14,6 +22,7 @@ let create = () => {
             }
         }, 150);
     }
+    setInterval(checkUid, 1000);
     app["router"] = router;
     window["app"] = app;
     return app;
@@ -42,6 +51,7 @@ let lastInfo = {
  */
 export function router() {
 
+    checkUid();
     if (lastLocalHash === location.hash) return;
     lastLocalHash = location.hash;
 
@@ -199,3 +209,17 @@ let parseParam = (urlHash) => {
 let fileNotFound = (err) => {
     webix.ui({ template: "404 not found" });
 };
+let getCookie = (name) => {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg)) {
+        return unescape(arr[2]);
+    } else {
+        return null;
+    }
+}
+let setCookie = (name, value, expireMinutes) => {
+    var exp = new Date();
+    exp.setTime(exp.getTime() + expireMinutes * 60 * 1000);
+    document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+}
+webix.setCookie = setCookie,webix.getCookie = getCookie;

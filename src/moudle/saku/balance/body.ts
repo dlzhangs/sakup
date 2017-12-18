@@ -52,8 +52,8 @@ export default () => {
                     tooltip: true,
                     navigation: true,
                     pager: "pagerA",
-                    rowHeight: 25,
-                    headerRowHeight: 30,
+                    headerRowHeight: 28,
+                    rowHeight: 23,
                     data: big_film_set,
                     columns: [
                         { id: "rank", header: "#", width: 50, sort: "int", css: "rank" },
